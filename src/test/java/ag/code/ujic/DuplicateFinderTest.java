@@ -9,19 +9,19 @@ class DuplicateFinderTest {
 
     @Test
     void should_return_zero() {
-        int result = finder.solveWithSet(new int[]{0, 0, 1, 2, 3});
+        Integer result = finder.find(new Integer[]{0, 0, 1, 2, 3}).get();
         Assertions.assertEquals(0, result);
     }
 
     @Test
     void should_return_one() {
-        int result = finder.solveWithSet(new int[]{0, 1, 2, 3, 1});
+        Integer result = finder.find(new Integer[]{0, 1, 2, 3, 1}).get();
         Assertions.assertEquals(1, result);
     }
 
     @Test
     void should_return_minus_twelve() {
-        int result = finder.solveWithSet(new int[]{-12, -6, 0, -12, 3, 1});
+        Integer result = finder.find(new Integer[]{-12, -6, 0, -12, 3, 1}).get();
         Assertions.assertEquals(-12, result);
     }
 

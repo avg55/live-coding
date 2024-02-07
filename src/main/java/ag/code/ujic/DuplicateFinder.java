@@ -2,6 +2,7 @@ package ag.code.ujic;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -9,34 +10,27 @@ import java.util.Set;
  * Exactly one number is duplicated in the array.
  * Write java function to find this duplicate
  * <p>
+ * Additional: try to write generic method
+ * <p>
  * Additional questions that would be useful to ask:
- * - does the array contain only positive, negative, or both? (do I really need to know this?)
  * - can the array be modified? (i.e. sort)
  * - can additional Collections be used?
  * <p>
- * Assumptions:
- * - the array contains only integers
- * - the array contains exactly one duplicate number (so I don't need any specific value to return if there's no duplicate)
  */
 
 public class DuplicateFinder {
 
     // using Set
-    public int solveWithSet(int[] array) {
+    public <T> Optional<T> find(T[] array) {
 
-        Set<Integer> duplicates = new HashSet<>();
+        Set<T> uniqueElements = new HashSet<>();
 
-        // I don't need any special value to be returned in case there's no duplicate number,
-        // so I can initialize result with any value, result will be assigned to duplicate number anyway
-        int result = 0;
-
-        for (int i : array) {
-            if (!duplicates.add(i)) {
-                result = i;
-                break;
+        for (T element : array) {
+            if (!uniqueElements.add(element)) {
+                return Optional.of(element);
             }
         }
-        return result;
+        return Optional.empty();
     }
 
     // the idea is that x XOR y = 0 iff x = y
