@@ -1,11 +1,11 @@
-## 1
+-- 1
 
-# Предложить примерную архитектуру БД для библиотеки,
-# чтобы можно было ответить на вопрос,
-# какие книги выдавались более одного раза.
-# Также предложить SQL запрос, чтобы выбрать такие книги.
+-- Предложить примерную архитектуру БД для библиотеки,
+-- чтобы можно было ответить на вопрос,
+-- какие книги выдавались более одного раза.
+-- Также предложить SQL запрос, чтобы выбрать такие книги
 
-# DDL queries
+-- DDL queries
 create table book (
 	id Integer primary key generated always as identity,
 	title varchar(50)
@@ -19,7 +19,7 @@ create table book_order (
         REFERENCES book(id)
 );
 
-# DML queries
+-- DML queries
 insert into book(title)
 values
 	('Война и мир'),
@@ -31,9 +31,40 @@ values
 insert into book_order(book_id)
 values (1), (2), (3), (4), (4), (3), (3), (2), (2), (2), (1), (4), (4), (5);
 
-# Final query
+-- Final query
 select bo.book_id book_id, bb.title title, count(bo.book_id) times
 from book_order bo
     join book bb on bb.id = bo.book_id
 group by bo.book_id, bb.title
 having count(bo.book_id) > 1;
+
+-- Улучшение ответа: для реальной ситуации здесь лучше подойдет связь многие-ко-многим,
+-- потому что один заказ может содержать несколько книг.
+
+-- DDL queries
+
+-- Таблица book без изменений
+
+create table rent (
+	rent_id Integer primary key generated always as identity,
+	client_id integer
+);
+
+create table book_rent (
+    id Integer primary key generated always as identity,
+	book_id integer,
+	rent_id integer
+);
+
+-- DML queries
+insert into rent(client_id)
+values (100), (200), (300), (400), (400), (300), (300), (200), (200), (200), (100), (400), (400), (500);
+
+insert into book_rent(book_id, rent_id)
+values (1, 1), (4, 1), (5, 2), (2, 3), (2, 4), (1, 5), (3, 5), (4, 6), (1, 6);
+
+-- Final query
+select br.book_id , bb.title , count(br.book_id)
+from book_rent br join book bb on bb.id = br.book_id
+group by br.book_id , bb.title
+having count(br.book_id) > 1
