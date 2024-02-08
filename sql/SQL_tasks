@@ -1,0 +1,39 @@
+## 1
+
+# Предложить примерную архитектуру БД для библиотеки,
+# чтобы можно было ответить на вопрос,
+# какие книги выдавались более одного раза.
+# Также предложить SQL запрос, чтобы выбрать такие книги.
+
+# DDL queries
+create table book (
+	id Integer primary key generated always as identity,
+	title varchar(50)
+);
+
+create table book_order (
+	id Integer primary key generated always as identity,
+	book_id integer,
+	 CONSTRAINT fk_book
+      FOREIGN KEY(book_id)
+        REFERENCES book(id)
+);
+
+# DML queries
+insert into book(title)
+values
+	('Война и мир'),
+	('Преступление и наказание'),
+	('Старик Хоттабыч'),
+	('Колобок'),
+	('Java');
+
+insert into book_order(book_id)
+values (1), (2), (3), (4), (4), (3), (3), (2), (2), (2), (1), (4), (4), (5);
+
+# Final query
+select bo.book_id book_id, bb.title title, count(bo.book_id) times
+from book_order bo
+    join book bb on bb.id = bo.book_id
+group by bo.book_id, bb.title
+having count(bo.book_id) > 1;
