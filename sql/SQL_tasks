@@ -68,3 +68,34 @@ select br.book_id , bb.title , count(br.book_id)
 from book_rent br join book bb on bb.id = br.book_id
 group by br.book_id , bb.title
 having count(br.book_id) > 1
+
+
+-- 2
+Даны две таблицы:
+EMPLOYEES
+---------------|---------
+EMP_ID         | NUMBER PK
+SURNAME        | VARCHAR
+SALARY         | NUMBER
+DEPARTMENT_ID  | NUMBER FK
+
+
+DEPARTMENTS
+----------------|---------
+DEPARTMENT_ID   | NUMBER PK
+DEPARTMENT_NAME | VARCHAR
+
+Получить список департаментов и среднюю з/п по департаменту,
+где средняя з/п по департаменту больше 5000.
+
+Ожидаемый рез-т:
+DEPARTMENT_NAME         AVG_SALARY
+HR                          8000
+IT                         12000
+
+-- Answer
+select dp.DEPARTMENT_NAME, avg(ee.salary)
+from departments dp join employees ee
+    on dp.DEPARTMENT_ID = ee.DEPARTMENT_ID
+group by dp.DEPARTMENT_NAME
+having avg(ee.salary) > 5000;
